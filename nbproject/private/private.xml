@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/xampp/htdocs/logistic_nec/protected/models/TbRequest.php</file>
+            <file>file:/C:/xampp/htdocs/logistic_nec/protected/models/TbSnSpare.php</file>
+            <file>file:/C:/xampp/htdocs/logistic_nec/protected/views/tbSnSpare/requestspare.php</file>
+            <file>file:/C:/xampp/htdocs/logistic_nec/protected/controllers/TbRequestController.php</file>
+            <file>file:/C:/xampp/htdocs/logistic_nec/protected/views/tbRequest/index2.php</file>
+            <file>file:/C:/xampp/htdocs/logistic_nec/protected/views/tbSnSpare/_formrequestspare.php</file>
+            <file>file:/C:/xampp/htdocs/logistic_nec/protected/views/tbSnSpare/request.php</file>
+            <file>file:/C:/xampp/htdocs/logistic_nec/protected/views/tbRequest/index.php</file>
+            <file>file:/C:/xampp/htdocs/logistic_nec/protected/controllers/TbSnSpareController.php</file>
+        </group>
+    </open-files>
+</project-private>
