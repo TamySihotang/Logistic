@@ -32,7 +32,7 @@ class TbRequestController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','admin','index2','rejectrequest','acceptdelivery','acceptrequest','canceldelivery','cancelrequest'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -116,14 +116,27 @@ class TbRequestController extends Controller
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
-
+        
+        
 	/**
 	 * Lists all models.
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('TbRequest',array('criteria'=> array('condition'=>'id_author='. Yii::app()->user->id)));
+                $user = TbUser::model()->findByAttributes(array('id_user'=>Yii::app()->user->id));
+                $modelBranchOffice = TbAuthorBranchOffice::model()->findByAttributes(array('id_user'=> $user->id_user));
+		$dataProvider=new CActiveDataProvider('TbRequest',array('criteria'=> array('condition'=>'id_destiny='. $modelBranchOffice->id_office)));
 		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
+		));
+	}
+        
+        public function actionIndex2()
+	{
+                $user = TbUser::model()->findByAttributes(array('id_user'=>Yii::app()->user->id));
+                $modelBranchOffice = TbAuthorBranchOffice::model()->findByAttributes(array('id_user'=> $user->id_user));
+		$dataProvider=new CActiveDataProvider('TbRequest',array('criteria'=> array('condition'=>'id_origin='. $modelBranchOffice->id_office)));
+		$this->render('index2',array(
 			'dataProvider'=>$dataProvider,
 		));
 	}
@@ -224,6 +237,100 @@ class TbRequestController extends Controller
             $dataProvider = new CactiveDataProvider('TbRequest',array('criteria'=>$criteria));
             $this->render('Listrequest',array('dataProvider'=>$dataProvider));
         }
+        
+        public function actionRequestspare($id){
+            $model=$this->loadModel($id);
+            $modelRequest= new TbRequest;
+            $modelSpareOffice= new TbSpareOffice;
+            $user = TbUser::model()->findByAttributes(array('id_user'=>Yii::app()->user->id));
+            $modelBranchOffice = TbAuthorBranchOffice::model()->findByAttributes(array('id_user'=> $user->id_user));
+            $userbranch= Yii::app()->user->id;
+            $today = date('Y-m-d H:i:s', strtotime('0 day'));
+            $after = date('Y-m-d H:i:s', strtotime($today . '+10 day'));
+            $modelRequest->order_number = $modelRequest->id_request;
+            $modelRequest->id_sn = $model->id_sn;
+            $modelRequest->id_spare = $model->id_spare;
+            $modelRequest->id_origin = $model->id_office;
+            $modelRequest->id_destiny = $modelBranchOffice->id_office;
+            $modelRequest->id_author = $modelBranchOffice->id_author;
+            $modelRequest->start_date = $today;
+            $modelRequest->end_date = $after;
+            $modelRequest->status_request = "Request";
+// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+			if($model->save()&&$modelRequest->save()){
+                            $this->redirect(array('tbRequest/index'));
+                      }
+                        
+		
+        }
+        
+        public function actionAcceptdelivery($id){
+            $model=$this->loadModel($id);
+            $modelSnSpare=TbSnSpare::model()->findByPk($model->id_sn);
+                $model->status_request="Accepted";
+                $modelSnSpare->id_office =  $model->id_destiny;
+                if($model->save()&&$modelSnSpare->save()){
+                    $this->redirect(array('tbRequest/index2'));
+                }
+                
+        }
+        
+        public function actionCanceldelivery($id){
+            $model=$this->loadModel($id);
+            $model->status_request ="Delivery Cancelled";
+            if($model->save()){
+                $this->redirect(array('tbRequest/index2'));
+            }
+        }
+        
+        public function actionAcceptrequest($id){
+            $model=$this->loadModel($id);
+            $model->status_request="In Delivery";
+            if($model->save()){
+                $this->redirect(array('tbRequest/index2'));
+            }
+        }
+        
+        public function actionRejectrequest($id){
+         
+		$model=$this->loadModel($id);
+                $model->status_request="Rejected";
+                if($model->save()){
+                    $this->redirect(array('tbRequest/index2'));
+                }
+        }
+        
+        public function actionCancelrequest($id){
+          $model=$this->loadModel($id);
+          $model->status_request ="Cancelled";
+          if($model->save()){
+              $this->redirect(array('tbRequest/index'));
+          }
+            
+                
+        }
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+//
+//		if(isset($_POST['TbRequest']))
+//		{
+//			$model->attributes=$_POST['TbRequest'];
+//                        // $model->status_request="Rejected";
+//			if($model->save()){   
+//                       
+//                        }
+//				$this->redirect(array('tbRequest/index2'));
+//		}
+//                
+//                $this->render('rejectrequest',array(
+//                    'model'=>$model,
+//                ));
+
+	
+            
+        
                 
 }
 

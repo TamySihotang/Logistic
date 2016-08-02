@@ -115,7 +115,9 @@
 				'widgetOptions' => array(
 					'options' => array(
 						'language' => 'en',
+                                            'format'=>'yyyy-mm-dd ',
 					),
+                                    
 				),
 				'wrapperHtmlOptions' => array(
 					'class' => 'col-sm-5',
@@ -138,6 +140,7 @@
 				'widgetOptions' => array(
 					'options' => array(
 						'language' => 'en',
+                                            'format'=>'yyyy-mm-dd ',
 					),
 				),
 				'wrapperHtmlOptions' => array(

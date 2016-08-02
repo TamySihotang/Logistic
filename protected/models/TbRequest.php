@@ -40,7 +40,7 @@ class TbRequest extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_sn, id_spare, id_origin, id_destiny, id_author, start_date, end_date, status_request', 'required'),
+			array('id_sn, id_spare, id_origin, id_destiny, id_author, status_request', 'required'),
 			array('order_number, id_sn, id_spare, id_origin, id_destiny, id_author', 'numerical', 'integerOnly'=>true),
 			array('status_request', 'length', 'max'=>64),
 			// The following rule is used by search().
@@ -75,8 +75,8 @@ class TbRequest extends CActiveRecord
 			'order_number' => 'Order Number',
 			'id_sn' => 'Serial Number',
 			'id_spare' => 'Sparepart',
-			'id_origin' => 'Origin',
-			'id_destiny' => 'Destiny',
+			'id_origin' => 'Your Office',
+			'id_destiny' => 'Requester Office',
 			'id_author' => 'Requester',
 			'start_date' => 'Start Date',
 			'end_date' => 'End Date',
