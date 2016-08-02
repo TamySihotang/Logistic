@@ -32,6 +32,13 @@ $('.search-form form').submit(function(){
     You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
     or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
 </p>-->
+<<<<<<< HEAD
+=======
+<form method="get">
+<input type="search" placeholder="search" name="q" value="<?=isset($_GET['q']) ? CHtml::encode($_GET['q']) : '' ; ?>" />
+<input type="submit" value="search" />
+</form>
+>>>>>>> d61e51ef3c160b2806204b389f7920627e0a4522
 
 <?php echo CHtml::link('Advanced Search', '#', array('class' => 'search-button')); ?>
 <div class="search-form" style="display:none">
