@@ -207,98 +207,81 @@ class TbSnSpareController extends Controller {
         ));
     }
 
-    public function actionRequest() {
-        $model = new TbSnSpare('search');
+    public function actionRequest()
+	{
+		$model=new TbSnSpare('search');
+                
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['TbSnSpare']))
+			$model->attributes=$_GET['TbSnSpare'];
 
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['TbSnSpare']))
-            $model->attributes = $_GET['TbSnSpare'];
-
-        $this->render('request', array(
-            'model' => $model,
-        ));
-    }
-
-    public function actionRequest2() {
+		$this->render('request',array(
+			'model'=>$model,
+		));
+	}   
+        
+        public function actionRequest2() {
         $modelRequest = new TbRequest;
         $modelSnSpare = new TbSnSpare;
         $modelSpareOffice = new TbSpareOffice;
-
-        $user = TbUser::model()->findByAttributes(array('id_user' => Yii::app()->user->id));
-        $modelBranchOffice = TbAuthorBranchOffice::model()->findByAttributes(array('id_user' => $user->id_user));
+        
+        $user = TbUser::model()->findByAttributes(array('id_user'=>Yii::app()->user->id));
+        $modelBranchOffice = TbAuthorBranchOffice::model()->findByAttributes(array('id_user'=> $user->id_user));
         $office = TbOffice::model()->findByAttributes(array('id_office' => $modelBranchOffice->id_office));
         $modelRequest->order_number = $modelRequest->id_request;
-
-        //$modelSnSpare->attributes = $_POST['TbSnSpare'];
-        //$modelRequest->attributes = $_POST['TbRequest'];
-        //$modelSpareOffice->attributes = $_POST['TbSpareOffice'];
-        if (isset($_POST['Request'])) {
-            if ($modelRequest->save()) {
-                $modelRequest->attributes = $_POST['TbRequest'];
-                $modelRequest->id_sn = $modelSnSpare->id_sn;
-                $modelRequest->id_spare = $modelSnSpare->id_spare;
-                $modelRequest->id_origin = $modelSnSpare->id_office;
-                $modelRequest->id_destiny = $modelBranchOffice->id_office;
-                $modelRequest->id_author = $modelBranchOffice->id_author;
-                $modelRequest->status_request = "Request";
-                Yii::app()->user->setFlash('success', "Your Request is Successful");
-                $this->redirect(array('tbRequest/index'));
-            }
-        }
-    }
-
-    public function actionRequestspare($id) {
-        $model = $this->loadModel($id);
-        $modelRequest = new TbRequest;
-        $modelSpareOffice = new TbSpareOffice;
-        $user = TbUser::model()->findByAttributes(array('id_user' => Yii::app()->user->id));
-        $modelBranchOffice = TbAuthorBranchOffice::model()->findByAttributes(array('id_user' => $user->id_user));
-        $userbranch = Yii::app()->user->id;
-        $today = date('Y-m-d H:i:s', strtotime('0 day'));
-        $after = date('Y-m-d H:i:s', strtotime($today . '+10 day'));
-// Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if (isset($_POST['TbSnSpare'], $_POST['TbRequest'])) {
-            $model->attributes = $_POST['TbSnSpare'];
+        
+            //$modelSnSpare->attributes = $_POST['TbSnSpare'];
+            //$modelRequest->attributes = $_POST['TbRequest'];
+            //$modelSpareOffice->attributes = $_POST['TbSpareOffice'];
+            if (isset($_POST['Request'])){
+                if ($modelRequest->save()){
             $modelRequest->attributes = $_POST['TbRequest'];
-
-            if ($model->save()) {
-                $modelRequest->order_number = $modelRequest->id_request;
-                $modelRequest->id_sn = $model->id_sn;
-                $modelRequest->id_spare = $model->id_spare;
-                $modelRequest->id_origin = $model->id_office;
-                $modelRequest->id_destiny = $modelBranchOffice->id_office;
-                $modelRequest->id_author = $modelBranchOffice->id_author;
-                //$modelRequest->start_date = $today;
-                //$modelRequest->end_date = $after;
-                $modelRequest->status_request = "Requested";
-                $modelRequest->save();
-
-                //$modelRequest = TbRequest::model()->findByAttributes(array('id_sn'));
-//                            $modelSpareOffice->id_office = $model->id_office;
-//                            $modelSpareOffice->id_spare = $model->id_spare;
-//                            $modelSpareOffice->id_sn = $model->id_sn;
-//                            $modelSpareOffice->id_status_spare = $model->id_status_spare;
-//                            $modelSpareOffice->save();
-
-                $this->redirect(array('request'));
+            $modelRequest->id_sn = $modelSnSpare->id_sn;
+            $modelRequest->id_spare = $modelSnSpare->id_spare;
+            $modelRequest->id_origin = $modelSnSpare->id_office;
+            $modelRequest->id_destiny = $modelBranchOffice->id_office;
+            $modelRequest->id_author = $modelBranchOffice->id_author;
+            $modelRequest->status_request = "In Delivery";
+            Yii::app()->user->setFlash('success', "Your Request is Successful");
+            $this->redirect(array('tbRequest/index'));
+            }
             }
         }
-
-        $this->render('requestspare', array(
-            'model' => $model,
-            'modelRequest' => $modelRequest,
-        ));
-    }
-
-    public function actionAccept() {
         
-    }
+        public function actionRequestspare($id){
+            $model=$this->loadModel($id);
+            $modelRequest= new TbRequest;
+            $modelSpareOffice= new TbSpareOffice;
+            $user = TbUser::model()->findByAttributes(array('id_user'=>Yii::app()->user->id));
+            $modelBranchOffice = TbAuthorBranchOffice::model()->findByAttributes(array('id_user'=> $user->id_user));
+            $userbranch= Yii::app()->user->id;
+            $today = date('Y-m-d H:i:s', strtotime('0 day'));
+            $after = date('Y-m-d H:i:s', strtotime($today . '+10 day'));
+            $modelRequest->order_number = $modelRequest->id_request;
+            $modelRequest->id_sn = $model->id_sn;
+            $modelRequest->id_spare = $model->id_spare;
+            $modelRequest->id_origin = $model->id_office;
+            $modelRequest->id_destiny = $modelBranchOffice->id_office;
+            $modelRequest->id_author = $modelBranchOffice->id_author;
+            $modelRequest->start_date = $today;
+            $modelRequest->end_date = $after;
+            $modelRequest->status_request = "Request";
+// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+			if($model->save()&&$modelRequest->save()){
+                            $this->redirect(array('tbRequest/index'));
+                      }
+                        
+		
+        }
 
-    public function actionReject() {
+        public function actionAccept(){
+            
+        }
         
-    }
+        public function actionReject(){
+            
+        }
 
     /**
      * Returns the data model based on the primary key given in the GET variable.
