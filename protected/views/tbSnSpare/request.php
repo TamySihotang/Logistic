@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Serial Number', 'url'=>array('index')),
+	//array('label'=>'List Serial Number', 'url'=>array('index')),
 	//array('label'=>'Create TbSnSpare', 'url'=>array('create')),
 );
 
@@ -33,7 +33,7 @@ You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&g
 or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
 </p>-->
 
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
+<?php echo CHtml::link('<b>Pencarian Lebih Lanjut</b>','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
@@ -43,6 +43,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 <?php 
  $user = TbUser::model()->findByAttributes(array('id_user'=>Yii::app()->user->id));
             $modelBranchOffice = TbAuthorBranchOffice::model()->findByAttributes(array('id_user'=> $user->id_user));
+            //$SnSpare = TbSnSpare::model()->findByAttributes(array('id_office'=>$modelBranchOffice->id_office));
+            $Request = TbRequest::model()->findByAttributes(array('id_author'=>$modelBranchOffice->id_author));
 $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'tb-sn-spare-grid',
 	'dataProvider'=>$model->search(),
@@ -83,9 +85,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
 //			'class'=>'CButtonColumn',
 //		),
                             array(
-                                'header'=>'Request to another Office',
+                                'header'=>'Deliver / Request',
                                 'class'=>'CButtonColumn',
-                                'template'=>'{request}',
+                                'template'=>'{request}{deliver}',
                                 'buttons'=>array(
                                     'request'=>array(
                                         'label'=>'Request This Sparepart',
@@ -93,21 +95,48 @@ $this->widget('zii.widgets.grid.CGridView', array(
                                         'imageUrl'=>Yii::app()->baseUrl.'/images/Request-Button.png',
                                         'visible'=>'$data->id_office !='.$modelBranchOffice->id_office,
                                     ),
-                                ),
-                                ),
-                            
-                            array(
-                                'header'=>'Deliver To Customer',
-                                'class'=>'CButtonColumn',
-                                'template'=>'{deliver}',
-                                'buttons'=>array(
-                                    'deliver'=>array(
+                                      'deliver'=>array(
                                         'label'=>'Deliver To Customer',
                                         'url'=>'Yii::app()->createUrl("tbSnSpare/delivercustomer",array("id"=>$data->id_sn))',
                                         'imageUrl'=>Yii::app()->baseUrl.'/images/Delivery-Button.jpg',
                                         'visible'=>'$data->id_office == '.$modelBranchOffice->id_office,
-                                    ),
+                                        
+                                          ),
+//                                    'YouRequested'=>array(
+//                                        'label'=>'You Request this part',
+//                                        'url'=>'',
+//                                        'imageUrl'=>'',
+//                                        //'visible'=>$data->tbRequests->status_request=="Request",
+//                                    ),
                                 ),
                                 ),
+//                                'class'=>'CButtonColumn',
+//                                'template'=>'{waiting}{deliver}',
+//                                'buttons'=>array(
+//                                  'waiting'=>array(
+//                                      'label'=>'Waiting For Response',
+//                                      'url'=>'',
+//                                      'imageUrl'=>Yii::app()->baseUrl.'/images/Waiting-Response.png',
+//                                      'visible'=>'$data->office !='.$modelRequest1->id_author == $modelBranchOffice->id_author && $modelRequest1->id_destiny == $modelBranchOffice->id_office &&
+//                                                $modelRequest1->status == "Requested",
+//                                  ),  
+//                                ),
+                                
+                           
+//                            array(
+//                                'header'=>'Deliver / Request',
+//                                'class'=>'CButtonColumn',
+//                                'template'=>'{deliver}',
+//                                'buttons'=>array(
+//                                    'deliver'=>array(
+//                                        'label'=>'Deliver To Customer',
+//                                        'url'=>'Yii::app()->createUrl("tbSnSpare/delivercustomer",array("id"=>$data->id_sn))',
+//                                        'imageUrl'=>Yii::app()->baseUrl.'/images/Delivery-Button.jpg',
+//                                        'visible'=>'$data->id_office == '.$modelBranchOffice->id_office,
+//                                    ),
+//                                ),
+//                                ),
+                            
+                            
 	),
 )); ?>
